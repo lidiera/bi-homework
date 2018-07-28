@@ -23,15 +23,15 @@ ALTER PROCEDURE sProc_UpsertMerge
 	--@SourceTable nvarchar(50) = NULL, 
 	--@PrimaryKeyColumn nvarchar(50) = NULL,
 	--@DestinationTable nvarchar(50) = NULL 
-	@SourceTable nvarchar(50) = '[TEMP_Source_DataIn_Account]', 
+	@SourceTable nvarchar(50) = 'TEMP_Source_DataIn_Account', 
 	@PrimaryKeyColumn nvarchar(50) = '[Account No]',
-	@DestinationTable nvarchar(50) = '[Source_DataIn_Account]' 
+	@DestinationTable nvarchar(50) = 'Source_DataIn_Account' 
 	
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
+	SET NOCOUNT OFF;
 
     -- Insert statements for procedure here
 
@@ -58,10 +58,7 @@ BEGIN
 			, 2, 1000) AS [columns]
 		FROM column_names)
 	SELECT @ColumnsString = [columns] FROM column_names_subresult
-
 	PRINT (@ColumnsString)
-	
-
 
 	---------------------------------------------------------------------------
 	-- Insert new rows
@@ -85,7 +82,7 @@ BEGIN
 	---------------------------------------------------------------------------
 	-- Update existing rows
 	---------------------------------------------------------------------------
-
+	DECLARE @CursorColumnName AS nvarchar(50)
 	DECLARE Columns_Cursor CURSOR FOR 
     SELECT '[' + column_name + ']'
 	FROM [information_schema].[columns] 
@@ -93,32 +90,23 @@ BEGIN
 	AND column_name <> SUBSTRING(@PrimaryKeyColumn, 2,(LEN(@PrimaryKeyColumn) -2))
 
 	OPEN Columns_Cursor 
-	FETCH NEXT FROM Columns_Cursor INTO @CursorColumnName
+	FETCH NEXT FROM Columns_Cursor INTO @CursorColumnName 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
+		
 		SET @SQL = '
 			UPDATE ' + @DestinationTable + '
-			SET ' + @CursorColumnName + ' = ''
+			SET ' + @CursorColumnName + ' = [Source].' + @CursorColumnName + '
 			FROM ' + @DestinationTable + ' AS [Destination]
 			INNER JOIN ' + @SourceTable + ' AS [Source]
 			ON [Destination].' + @PrimaryKeyColumn + ' = [Source].' + @PrimaryKeyColumn + '
-			WHERE 
-	
-	UPDATE ProductReviews
-SET    ProductReviews.status = '0'
-FROM   ProductReviews
-       INNER JOIN products
-         ON ProductReviews.pid = products.id
-WHERE  ProductReviews.id = '17190'
-       AND products.shopkeeper = '89137'
-
-
-
-    FETCH NEXT FROM Customer_Cursor INTO
-    @CustomerId, @FirstName, @LastName
-END
-CLOSE Customer_Cursor
-DEALLOCATE Customer_Cursor
+			AND [Destination].' + @CursorColumnName + ' <> [Source].' + @CursorColumnName
+		PRINT(@SQL);
+		EXEC(@SQL);
+		FETCH NEXT FROM Columns_Cursor INTO @CursorColumnName
+	END
+	CLOSE Columns_Cursor
+	DEALLOCATE Columns_Cursor
 
 
 
@@ -146,7 +134,6 @@ DEALLOCATE Customer_Cursor
  --   [ OPTION ( <query_hint> [ ,...n ] ) ]  
 --	' 
 	
-	PRINT(@SQL);
-	EXEC(@SQL);
+	
 END
 GO
