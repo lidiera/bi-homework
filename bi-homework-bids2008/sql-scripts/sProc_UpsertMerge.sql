@@ -20,12 +20,12 @@ GO
 -- =============================================
 ALTER PROCEDURE sProc_UpsertMerge
 	-- Add the parameters for the stored procedure here
-	--@SourceTable nvarchar(50) = NULL, 
-	--@PrimaryKeyColumn nvarchar(50) = NULL,
-	--@DestinationTable nvarchar(50) = NULL 
-	@SourceTable nvarchar(50) = 'TEMP_Source_DataIn_Account', 
-	@PrimaryKeyColumn nvarchar(50) = '[Account No]',
-	@DestinationTable nvarchar(50) = 'Source_DataIn_Account' 
+	@SourceTable nvarchar(50) = NULL, 
+	@PrimaryKeyColumn nvarchar(50) = NULL,
+	@DestinationTable nvarchar(50) = NULL 
+	--@SourceTable nvarchar(50) = 'TEMP_Source_DataIn_Account', 
+	--@PrimaryKeyColumn nvarchar(50) = '[Account No]',
+	--@DestinationTable nvarchar(50) = 'Source_DataIn_Account' 
 	
 AS
 BEGIN
@@ -108,7 +108,13 @@ BEGIN
 	CLOSE Columns_Cursor
 	DEALLOCATE Columns_Cursor
 
+	---------------------------------------------------------------------------
+	-- Final tasks
+	---------------------------------------------------------------------------
 
+	SET @SQL = 'SELECT * FROM ' + @DestinationTable
+	PRINT(@SQL)
+	EXEC(@SQL)
 
 	--SET @SQL = '
 	--INSERT ' + @DestinationTable + ' (' + @PrimaryKeyColumn + ',' +  @ColumnsString + ')  
