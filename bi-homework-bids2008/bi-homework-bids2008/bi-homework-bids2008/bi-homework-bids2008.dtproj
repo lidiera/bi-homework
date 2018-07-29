@@ -49,7 +49,7 @@
       <FullPath>Source_DataIn_Account.dtsx</FullPath>
       <References />
     </DtsPackage>
-    <DtsPackage FormatVersion="0">
+    <DtsPackage FormatVersion="3">
       <Name>Source_DataIn_Transaction.dtsx</Name>
       <FullPath>Source_DataIn_Transaction.dtsx</FullPath>
       <References />
