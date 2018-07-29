@@ -54,5 +54,10 @@
       <FullPath>Source_DataIn_Transaction.dtsx</FullPath>
       <References />
     </DtsPackage>
+    <DtsPackage FormatVersion="3">
+      <Name>ETLCoordinator.dtsx</Name>
+      <FullPath>ETLCoordinator.dtsx</FullPath>
+      <References />
+    </DtsPackage>
   </DTSPackages>
 </Project>
