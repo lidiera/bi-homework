@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DTSConfiguration>
+	
+   <Configuration 
+	   ConfiguredType="Property" 
+	   Path="\Package.Variables[User::DBConnectionString].Properties[Value]" 
+	   ValueType="String">
+      <ConfiguredValue>Data Source=.;Initial Catalog=bi-homework;Provider=SQLNCLI10.1;Integrated Security=SSPI;Application Name=bi-homework;Auto Translate=False;</ConfiguredValue>
+   </Configuration>
+
+   <Configuration 
+	   ConfiguredType="Property" 
+	   Path="\Package.Variables[User::ExcelFilePath].Properties[Value]" 
+	   ValueType="String">
+      <ConfiguredValue>C:/Users/lidier/Documents/Visual Studio 2008/bi-homework/bi-homework-bids2008/bi-homework-bids2008/TransactionFile BI Assignment - We are GAP.xlsx</ConfiguredValue>
+   </Configuration>
+	
+</DTSConfiguration>
